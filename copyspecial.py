@@ -29,7 +29,11 @@ def get_paths(dir):
     return new_paths
 
     def copy_new(path, files):
-        
+        """copy special files to a directory"""
+        if not os.path.exists(path):
+            create_dir = os.makedirs(path)
+            
+
     def main():
     # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
