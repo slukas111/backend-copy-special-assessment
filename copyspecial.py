@@ -24,7 +24,10 @@ def get_paths(dir):
     new_paths = []
     files = os.listdir(dir)     
     for file in files:
-         
+        if re.search(r'__\w+__', file):
+            new_paths.append(file)
+    return new_paths
+
     
     def main():
     # This snippet will help you get started with the argparse module.
