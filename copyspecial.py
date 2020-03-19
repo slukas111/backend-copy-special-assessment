@@ -32,7 +32,14 @@ def get_paths(dir):
         """copy special files to a directory"""
         if not os.path.exists(path):
             create_dir = os.makedirs(path)
-            
+        else:
+            print("Path Exists")
+        
+        for file in files:
+            shutil.copy(file, path)
+        """mod to make a copy"""
+
+
 
     def main():
     # This snippet will help you get started with the argparse module.
@@ -41,6 +48,10 @@ def get_paths(dir):
     parser.add_argument('--tozip', help='dest zipfile for special files')
     # TODO need an argument to pick up 'from_dir'
     args = parser.parse_args()
+
+    all_paths = get_special_paths(args.fromdir)
+        copy_new(args.todir, all_paths)
+
 
     # TODO you must write your own code to get the cmdline args.
     # Read the docs and examples for the argparse module about how to do this.
