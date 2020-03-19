@@ -28,7 +28,8 @@ def get_paths(dir):
             new_paths.append(file)
     return new_paths
 
-    
+    def copy_new(path, files):
+        
     def main():
     # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
