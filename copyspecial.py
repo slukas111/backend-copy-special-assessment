@@ -39,7 +39,7 @@ def copy_to(path, files):
         shutil.copy(file, path)
     """mod to make a copy"""
 
-def zip_to(paths, zipoath):
+def zip_to(paths, zippath):
     """creates zip files from special files"""
     paths = list(paths)
     command = "zip -j {} {}".format(zippath, ' '.join(paths))
@@ -48,11 +48,14 @@ def zip_to(paths, zipoath):
     os.system(command)
 
 
+
+
 def main():
     # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
+    
     # TODO need an argument to pick up 'from_dir'
     args = parser.parse_args()
 
@@ -60,6 +63,12 @@ def main():
 
     if args.todir:
         copy_to(args.todir, all_paths)
+    if args.tozip:
+            zip_to(all_paths, args.tozip)
+
+    if not args.todir and not args.tozip:
+        for file in all_paths:
+            print(os.path.abspath(file))
     
 
     # TODO you must write your own code to get the cmdline args.
