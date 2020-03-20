@@ -16,19 +16,53 @@ import subprocess
 import argparse
 
 # This is to help coaches and graders identify student assignments
-__author__ = "???"
+__author__ = "Sasha Lukas"
 
 
-# +++your code here+++
-# Write functions and modify main() to call them
+def get_special_paths(dir):
+    """manipulate file paths"""
+    new_paths = []
+    files = os.listdir(dir)     
+    for file in files:
+        if re.search(r'__\w+__', file):
+            new_paths.append(file)
+    return new_paths
+
+def copy_to(path, files):
+    """copy special files to a directory"""
+    if not os.path.exists(path):
+        os.makedirs(path)
+    else:
+        print("Path Exists")
+
+    for file in files:
+        shutil.copy(file, path)
+    """mod to make a copy"""
+
+def zip_to_file(paths, zippath):
+    """creates zip files from special files"""
+    paths = list(paths)
+    command = "zip -j {} {}".format(zippath, ' '.join(paths))
+    print("I am going to do: ")
+    print(command)
+    os.system(command)
 
 def main():
-    # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
-    # TODO need an argument to pick up 'from_dir'
+    parser.add_argument('fromdir', help='dir to look for local files')
     args = parser.parse_args()
+    all_paths = get_special_paths(args.fromdir)
+    if args.todir:
+        copy_to(args.todir, all_paths)
+    if args.tozip:
+        zip_to_file(all_paths, os.path.join(os.getcwd(), args.tozip))
+
+    if not args.todir and not args.tozip:
+        for file in all_paths:
+            print(os.path.abspath(file))
+    
 
     # TODO you must write your own code to get the cmdline args.
     # Read the docs and examples for the argparse module about how to do this.
