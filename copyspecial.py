@@ -1,85 +1,64 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Copyspecial Assignment"""
-
-# Copyright 2010 Google Inc.
-# Licensed under the Apache License, Version 2.0
-# http://www.apache.org/licenses/LICENSE-2.0
-
-# Google's Python Class
-# http://code.google.com/edu/languages/google-python-class/
+# !/usr/bin/env python
+# -*- coding: utf-8 - *-
 
 import re
 import os
 import shutil
-import subprocess
 import argparse
 
-# This is to help coaches and graders identify student assignments
-__author__ = "Sasha Lukas"
+
+"""Copyspecial Assignment"""
+
+__author__ = "Chris Wilson, Koren, Sean, Julita"
+__helped__ = "geeterista"
 
 
-def get_special_paths(dir):
-    """manipulate file paths"""
-    new_paths = []
-    files = os.listdir(dir)     
-    for file in files:
-        if re.search(r'__\w+__', file):
-            new_paths.append(file)
-    return new_paths
+def get_spec_paths(dir):
+    """ given dir name returns the appended
+    results of the search for special files"""
+    result = []
+    file_directory = os.listdir(dir)
+    for file_name in file_directory:
+        if re.search(r'__\w+__', file_name):
+            result.append(file_name)
+    return result
 
-def copy_to(path, files):
-    """copy special files to a directory"""
+
+def copy_to_dir(path, files):
+    cwd = os.getcwd()
     if not os.path.exists(path):
-        os.makedirs(path)
+        create_dir = 'mkdir -p {0}'.format(path)
+        os.system(create_dir)
     else:
-        print("Path Exists")
-
+        print("Path exists")
     for file in files:
+        os.chdir(cwd)
         shutil.copy(file, path)
-    """mod to make a copy"""
 
-def zip_to(paths, zippath):
-    """creates zip files from special files"""
+
+def zip_to_file(paths, zippath):
     paths = list(paths)
     command = "zip -j {} {}".format(zippath, ' '.join(paths))
-    print("I am going to do: ")
+    print("Command I'm going to do: ")
     print(command)
     os.system(command)
 
 
-
-
 def main():
-    # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
-    
-    # TODO need an argument to pick up 'from_dir'
+    parser.add_argument('fromdir', help='dir to look for local files')
     args = parser.parse_args()
-
-    all_paths = get_special_paths(args.fromdir)
-
+    all_paths = get_spec_paths(args.fromdir)
     if args.todir:
-        copy_to(args.todir, all_paths)
+        copy_to_dir(args.todir, all_paths)
     if args.tozip:
-            zip_to(all_paths, args.tozip)
+        zip_to_file(all_paths, os.path.join(os.getcwd(), args.tozip))
 
     if not args.todir and not args.tozip:
         for file in all_paths:
             print(os.path.abspath(file))
-    
-
-    # TODO you must write your own code to get the cmdline args.
-    # Read the docs and examples for the argparse module about how to do this.
-
-    # Parsing command line arguments is a must-have skill.
-    # This is input data validation.  If something is wrong (or missing) with any
-    # required args, the general rule is to print a usage message and exit(1).
-
-    # +++your code here+++
-    # Call your functions
 
 
 if __name__ == "__main__":
